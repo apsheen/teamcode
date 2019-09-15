@@ -1,3 +1,6 @@
+very useful link: https://github.com/ftctechnh/ftc_app/wiki/Creating-and-Running-an-Op-Mode-(Android-Studio)
+
+//readme from ftc package
 ## TeamCode Module
 
 Welcome!
