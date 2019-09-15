@@ -1,6 +1,15 @@
-very useful link: https://github.com/ftctechnh/ftc_app/wiki/Creating-and-Running-an-Op-Mode-(Android-Studio)
+very useful links: 
 
-//readme from ftc package
+opmodes are the files that the robot uses to run, this explains how to create and run them:
+https://github.com/ftctechnh/ftc_app/wiki/Creating-and-Running-an-Op-Mode-(Android-Studio)
+
+documentation for the ftc package:
+https://ftctechnh.github.io/ftc_app/doc/javadoc/index.html
+
+first few pages should be for how to connect phone to driver station:
+https://www.firstinspires.org/sites/default/files/uploads/resource_library/ftc/blocksprogramming-trainingmanual.pdf
+
+readme from ftc package:
 ## TeamCode Module
 
 Welcome!
