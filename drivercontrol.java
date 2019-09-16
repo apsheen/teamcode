@@ -52,8 +52,7 @@ public class drivercontrol extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             //two wheel drive
-            double leftPower = 0; //0 is placeholder
-            double rightPower = 0; //0 is placeholder
+            double leftPower, rightPower = 0;
 
             //left stick to go forward, right stick to turn.
             /**double drive = -gamepad1.left_stick_y;
@@ -62,11 +61,43 @@ public class drivercontrol extends LinearOpMode {
             rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;**/
 
             //one stick to control each wheel
-            /**leftPower  = -gamepad1.left_stick_y ;
-            rightPower = -gamepad1.right_stick_y ;**/
+            leftPower  = -gamepad1.left_stick_y ;
+            rightPower = -gamepad1.right_stick_y ;
+
+            double angle;
+
+            /**
+             * i think the d-pad for 90 deg motion is a good idea for now, just to see how to do it
+             * and tank drive on the gamepads:
+             *
+             * code would be
+             * if(gamepad1.dpad_left == true)
+             * {
+             *     //left sliding code
+             * }
+             *
+             * else if(gamepad1.dpad_right == true)
+             * {
+             *     //right sliding code
+             * }
+             */
+
+            /**
+             * 4:00 9-15-19:
+             * right -- rotating/angles
+             * left -- 90 deg changes
+             */
+
+            /**if((gamepad1.left_stick_y != 0) && (gamepad1.right_stick_y == 0) && (gamepad1.right_stick_x == 0)) {
+
+            }
+
+            else if ((gamepad1.left_stick_x != 0) && (gamepad1.right_stick_y == 0) && (gamepad1.right_stick_x == 0)) {
 
 
-            //yes negative power is a thing for going backwards sorry for the false info
+            }
+             **/
+
             leftFront.setPower(leftPower);
             leftBack.setPower(leftPower);
             rightFront.setPower(rightPower);
