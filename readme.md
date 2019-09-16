@@ -9,6 +9,9 @@ https://ftctechnh.github.io/ftc_app/doc/javadoc/index.html
 first few pages should be for how to connect phone to driver station:
 https://www.firstinspires.org/sites/default/files/uploads/resource_library/ftc/blocksprogramming-trainingmanual.pdf
 
+gamepad map (includes names and types!):
+https://docs.google.com/document/d/1rOUcl6aQ8jbbV2GRgIat5whgIYpOUzqiun3xtT5MpVE/edit
+
 readme from ftc package:
 ## TeamCode Module
 
