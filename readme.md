@@ -12,6 +12,12 @@ https://www.firstinspires.org/sites/default/files/uploads/resource_library/ftc/b
 gamepad map (includes names and types!):
 https://docs.google.com/document/d/1rOUcl6aQ8jbbV2GRgIat5whgIYpOUzqiun3xtT5MpVE/edit
 
+mecanum wheel drive: explanation for directions
+https://ftcforum.usfirst.org/forum/ftc-technology/android-studio/6361-mecanum-wheels-drive-code-example
+
+mecanum wheel drive sample code: 
+https://ftcforum.usfirst.org/forum/ftc-technology/android-studio/6361-mecanum-wheels-drive-code-example
+
 readme from ftc package:
 ## TeamCode Module
 
