@@ -1,18 +1,22 @@
+/**
+ * linear opmode will run like in vex -- use if/if elses
+ * opmode will run event based (ie uses a swtich/case setup -- called a state machine)
+ */
+
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp
 @Autonomous
 
-public class autonomous extends LinearOpMode {
+public class autonomous extends OpMode {
     private ElapsedTime runtime = new ElapsedTime(); //game timer
 
-    //motor objects -- private
+    //motor objects -- why would you want these to be public?
     private DcMotor leftFront;
     private DcMotor leftBack;
     private DcMotor rightFront;
@@ -22,7 +26,7 @@ public class autonomous extends LinearOpMode {
     private DcMotor liftRight;
 
     @Override
-    public void runOpMode() {
+    public void init() {
         //initializing the motors
         leftFront = hardwareMap.get(DcMotor.class, "leftFront");
         leftBack = hardwareMap.get(DcMotor.class, "leftBack");
@@ -40,32 +44,30 @@ public class autonomous extends LinearOpMode {
 
         liftLeft.setDirection(DcMotor.Direction.FORWARD);
         liftRight.setDirection(DcMotor.Direction.FORWARD);
+    }
 
+    @Override
+    public void start() {
         //could possibly also use telemetry for debugging purposes?
-        telemetry.addData("Status", "Initialized");
+        telemetry.addData("Status", "Started");
         telemetry.update();
 
-        // Wait for the game to start (driver presses PLAY)
-        waitForStart();
-        runtime.reset(); //start game timer
+        super.start(); //not sure what this is exactly
+        runtime.reset();
 
-        // run until the end of the match (driver presses STOP)
-        while (opModeIsActive()) {
-            //two wheel drive
-            double leftPower = 0; //0 is placeholder
-            double rightPower = 0; //0 is placeholder
+        //stuff
+    }
 
-            //yes negative power is a thing for going backwards sorry for the false info
-            leftFront.setPower(leftPower);
-            leftBack.setPower(leftPower);
-            rightFront.setPower(rightPower);
-            rightBack.setPower(rightPower);
+    public void loop() {
+        /**
+         * can use if/else if statements like in vex
+         * or can use switch/case statements which seems to be popular with other ftc teams
+         */
 
-            //could possibly be used for debug later
+        //could possibly be used for debug later
             telemetry.addData("Status", "Running");
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.update();
-
         }
     }
 }
