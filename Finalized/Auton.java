@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import Math.java.util;
+
 @Autonomous(name="BettaFish", group="DriveTrain")
 public class Auton extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime(); //game timer
@@ -17,6 +19,11 @@ public class Auton extends LinearOpMode {
 
     static final double TRANSLATE_SPEED = 0.6;
     static final double ROTATE_SPEED = 0.5;
+    
+    static final double COUNTS_PER_MOTOR_REV = 1440;
+    static final double WHEEL_DIAMETER_INCHES = 4.0;
+    static final double COUNTS_PER_INCH = COUNTS_PER_MOTOR_REV / (WHEEL_DIAMETER_INCHES * Math.PI);
+    
 
     public double v1, v2, v3, v4;
 
@@ -26,16 +33,15 @@ public class Auton extends LinearOpMode {
     @Override
     public void runOpMode() {
         initialize();
-
-        waitForStart();
-
+        
         telemetry.addData("Status", "Initialized");
         telemetry.update();
+        
+        waitForStart();
 
         autonInstructions();
 
         while (opModeIsActive()) {
-            runMechanumVectorMethod();
 
             telemetry.addData("Status", "Running");
             telemetry.addData("Status", "Run Time: " + runtime.toString());
@@ -70,14 +76,19 @@ public class Auton extends LinearOpMode {
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void encoderMove(double vel, double leftShift, double rightShift, double dt) {
+    public void autonInstructions() {
+        encoderDrive(TRANSLATE_SPEED, 10, 10, 5.0);
+        encoderDrive(ROTATE_SPEED, 10, -10, 5.0);
+    }
+
+    public void encoderDrive(double vel, double leftShift, double rightShift, double dt) {
         int leftFrontTarget, leftBackTarget, rightFrontTarget, rightBackTarget;
 
         if (opModeIsActive()) {
-            leftFrontTarget = leftFront.getCurrentPosition() + (int)(leftShift);
-            leftBackTarget = leftBack.getCurrentPosition() + (int)(leftShift);
-            rightFrontTarget = rightFront.getCurrentPosition() + (int)(rightShift);
-            rightBackTarget = rightBack.getCurrentPosition() + (int)(rightShift);
+            leftFrontTarget = leftFront.getCurrentPosition() + (int)(leftShift * COUNTS_PER_INCH);
+            leftBackTarget = leftBack.getCurrentPosition() + (int)(leftShift * COUNTS_PER_INCH);
+            rightFrontTarget = rightFront.getCurrentPosition() + (int)(rightShift * COUNTS_PER_INCH);
+            rightBackTarget = rightBack.getCurrentPosition() + (int)(rightShift * COUNTS_PER_INCH);
 
             leftFront.setTargetPosition(leftFrontTarget);
             leftBack.setTargetPosition(leftBackTarget);
@@ -103,28 +114,6 @@ public class Auton extends LinearOpMode {
             rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
-    }
-
-    public void autonInstructions() {
-        encoderMove(TRANSLATE_SPEED, 20000.0, 20000.0, 5.0);
-        encoderMove(ROTATE_SPEED, 20000.0, -20000.0, 5.0);
-    }
-
-    public void runMechanumVectorMethod() {
-        double driveV, strafeV, rotateV;
-        driveV = -this.gamepad1.left_stick_y;
-        strafeV = -this.gamepad1.left_stick_x;
-        rotateV = this.gamepad1.right_stick_x;
-
-        v1 = driveV + strafeV + rotateV;
-        v2 = driveV - strafeV + rotateV;
-        v3 = driveV - strafeV - rotateV;
-        v4 = driveV + strafeV - rotateV;
-
-        leftFront.setPower(v1);
-        leftBack.setPower(v2);
-        rightFront.setPower(v3);
-        rightBack.setPower(v4);
     }
 
     public void setMotorPowers(double vel) {
