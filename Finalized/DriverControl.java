@@ -23,24 +23,6 @@ public class DriverControl extends LinearOpMode {
     //private DcMotor liftLeft;
     //private DcMotor liftRight;
 
-    public void runMechanumVectorMethod() {
-        double driveV, strafeV, rotateV;
-
-        driveV = -this.gamepad1.left_stick_y;
-        strafeV = -this.gamepad1.left_stick_x;
-        rotateV = this.gamepad1.right_stick_x;
-
-        v1 = driveV + strafeV + rotateV;
-        v2 = driveV - strafeV + rotateV;
-        v3 = driveV - strafeV - rotateV;
-        v4 = driveV + strafeV - rotateV;
-
-        leftFront.setPower(v1);
-        leftBack.setPower(v2);
-        rightFront.setPower(v3);
-        rightBack.setPower(v4);
-    }
-
     @Override
     public void runOpMode() {
         leftFront = hardwareMap.get(DcMotor.class, "leftFront");
@@ -77,5 +59,23 @@ public class DriverControl extends LinearOpMode {
             telemetry.addData("right back power", v4);
             telemetry.update();
         }
+    }
+    
+    public void runMechanumVectorMethod() {
+        double driveV, strafeV, rotateV;
+
+        driveV = -this.gamepad1.left_stick_y;
+        strafeV = -this.gamepad1.left_stick_x;
+        rotateV = this.gamepad1.right_stick_x;
+
+        v1 = driveV + strafeV + rotateV;
+        v2 = driveV - strafeV + rotateV;
+        v3 = driveV - strafeV - rotateV;
+        v4 = driveV + strafeV - rotateV;
+
+        leftFront.setPower(v1);
+        leftBack.setPower(v2);
+        rightFront.setPower(v3);
+        rightBack.setPower(v4);
     }
 }
