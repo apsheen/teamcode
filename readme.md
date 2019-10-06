@@ -18,6 +18,15 @@ https://ftcforum.usfirst.org/forum/ftc-technology/android-studio/6361-mecanum-wh
 mecanum wheel drive sample code: 
 https://ftcforum.usfirst.org/forum/ftc-technology/android-studio/6361-mecanum-wheels-drive-code-example
 
+mecanum wheel simulation:
+https://seamonsters-2605.github.io/sketches/mecanum/
+
+ftc skystone field:
+https://i.redd.it/5zbsi7qjzhl31.png
+
+Bettafish 7641 2019-2020 notebook:
+https://drive.google.com/drive/folders/1-bd7yGO_KdTUvuxeliJ4XE5dbuoI1YZv
+
 readme from ftc package:
 ## TeamCode Module
 
