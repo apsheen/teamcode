@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="BettaFish", group="DriveTrain")
+
 public class foundationAuton extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime(); //game timer
 
@@ -15,7 +16,7 @@ public class foundationAuton extends LinearOpMode {
     private DcMotor rightFront;
     private DcMotor rightBack;
 
-    static final double TRANSLATE_SPEED = 0.3;
+    static final double TRANSLATE_SPEED = 0.7;
 
     static final double COUNTS_PER_MOTOR_REV = 1120;
     static final double WHEEL_DIAMETER_INCHES = 4.0;
@@ -23,7 +24,6 @@ public class foundationAuton extends LinearOpMode {
 
 
     public double v1, v2, v3, v4;
-
     private DcMotor liftLeft;
     private DcMotor liftRight;
 
@@ -43,10 +43,15 @@ public class foundationAuton extends LinearOpMode {
             telemetry.addData("Status", "Running");
             telemetry.addData("Status", "Run Time: " + runtime.toString());
 
-            telemetry.addData("left front power", v1);
-            telemetry.addData("left back power", v2);
-            telemetry.addData("right front power", v3);
-            telemetry.addData("right back power", v4);
+            telemetry.addData("left front power", leftFront.getPowerFloat());
+            telemetry.addData("left back power", leftBack.getPowerFloat());
+            telemetry.addData("right front power", rightFront.getPowerFloat());
+            telemetry.addData("right back power", rightBack.getPowerFloat());
+
+            telemetry.addData("right back target", rightBack.getTargetPosition());
+            telemetry.addData("right front target", rightFront.getTargetPosition());
+            telemetry.addData("left back target", leftBack.getTargetPosition());
+            telemetry.addData("left front targer", leftFront.getTargetPosition());
             telemetry.update();
         }
     }
@@ -59,8 +64,8 @@ public class foundationAuton extends LinearOpMode {
 
         leftFront.setDirection(DcMotor.Direction.FORWARD);
         leftBack.setDirection(DcMotor.Direction.FORWARD);
-        rightFront.setDirection(DcMotor.Direction.FORWARD);
-        rightBack.setDirection(DcMotor.Direction.FORWARD);
+        rightFront.setDirection(DcMotor.Direction.REVERSE);
+        rightBack.setDirection(DcMotor.Direction.REVERSE);
 
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -74,13 +79,12 @@ public class foundationAuton extends LinearOpMode {
     }
 
     public void autonInstructions() {
-        encoderStrafe(TRANSLATE_SPEED, -72, -72, 10.0); //shifting right
-        setMotorDirections();
-        encoderDrive(TRANSLATE_SPEED, 45, 45, 6.0);
+        encoderStrafe(TRANSLATE_SPEED, -10, -10, 5.0); //shifting right
+        encoderDrive(TRANSLATE_SPEED, 10, 10, 5.0);
 //      encoderLift(0.3, 2);
 //      encoderLift(-0.3, 2);
-        encoderDrive(TRANSLATE_SPEED, -45, -45, 6.0);
-        encoderStrafe(TRANSLATE_SPEED, 72, 72, 10.0); //shifting left
+        encoderDrive(TRANSLATE_SPEED, -10, -10, 5.0);
+        encoderStrafe(TRANSLATE_SPEED, 10, 10, 5.0); //shifting left
     }
 
     public void encoderLift(double vel, double dt) {
@@ -118,7 +122,7 @@ public class foundationAuton extends LinearOpMode {
 
             runtime.reset();
 
-            setMotorPowers(Math.abs(vel));
+            setMotorPowers(vel);
 
             while (opModeIsActive() && (runtime.seconds() < dt)) {
 
@@ -153,7 +157,7 @@ public class foundationAuton extends LinearOpMode {
             rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             runtime.reset();
-            setMotorPowers(Math.abs(vel));
+            setMotorPowers(vel);
 
             while (opModeIsActive() && (runtime.seconds() < dt)) {
 
@@ -181,4 +185,4 @@ public class foundationAuton extends LinearOpMode {
         rightFront.setDirection(DcMotor.Direction.FORWARD);
         rightBack.setDirection(DcMotor.Direction.FORWARD);
     }
-}}
+}
