@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="BettaFish", group="DriveTrain")
@@ -15,9 +14,10 @@ public class AutonRedClose extends LinearOpMode {
     private DcMotor leftBack;
     private DcMotor rightFront;
     private DcMotor rightBack;
+    private DcMotor manipM;
 
-    static final double TRANSLATE_SPEED = 0.7;
-    static final double COUNTS_PER_MOTOR_REV = 1440;
+    static final double TRANSLATE_SPEED = 1;
+    static final double COUNTS_PER_MOTOR_REV = 1120;
     static final double WHEEL_DIAMETER_INCHES = 4.0;
     static final double COUNTS_PER_INCH = COUNTS_PER_MOTOR_REV / (WHEEL_DIAMETER_INCHES * Math.PI);
 
@@ -61,10 +61,26 @@ public class AutonRedClose extends LinearOpMode {
         leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        manipM = hardwareMap.get(DcMotor.class, "manipM");
+        manipM.setDirection(DcMotor.Direction.FORWARD);
+        manipM.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        manipM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void autonInstructions() {
-        encoderStrafe(TRANSLATE_SPEED, -36, -36, 10.0); //shifting right
+        encoderDrive(TRANSLATE_SPEED, 55, 55, 3);
+        encoderDrive(TRANSLATE_SPEED, -20, -20, 2);
+        encoderDrive(TRANSLATE_SPEED, 20, -20, 3);
+        encoderDrive(TRANSLATE_SPEED, 8, 8, 3);
+        manipOpen();
+        encoderDrive(TRANSLATE_SPEED, 6, 6, 3);
+        manipClose();
+        encoderDrive(TRANSLATE_SPEED, -20, 20, 2);
+        encoderDrive(TRANSLATE_SPEED, -35, -35, 3);
+
+
+//        encoderStrafe(TRANSLATE_SPEED, 48, -48, 5); //shifting right
     }
 
     public void encoderStrafe(double vel, double leftShift, double rightShift, double dt) {
@@ -135,6 +151,52 @@ public class AutonRedClose extends LinearOpMode {
             leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+    }
+
+    public void manipOpen() {
+        int manipTarget;
+
+        if (opModeIsActive()) {
+            manipTarget = manipM.getCurrentPosition() + 50;
+
+            manipM.setTargetPosition(manipTarget);
+
+            manipM.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            runtime.reset();
+            manipM.setPower(0.1);
+
+            while (opModeIsActive() && (runtime.seconds() < 1)) {
+
+            }
+
+            manipM.setPower(0);
+
+            manipM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+    }
+
+    public void manipClose() {
+        int manipTarget;
+
+        if (opModeIsActive()) {
+            manipTarget = manipM.getCurrentPosition() - 1000;
+
+            manipM.setTargetPosition(manipTarget);
+
+            manipM.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            runtime.reset();
+            manipM.setPower(-0.2);
+
+            while (opModeIsActive() && (runtime.seconds() < 1)) {
+
+            }
+
+            manipM.setPower(0);
+
+            manipM.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
 
