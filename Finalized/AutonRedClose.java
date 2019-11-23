@@ -71,22 +71,38 @@ public class AutonRedClose extends LinearOpMode {
     }
 
     public void autonInstructions() {
-        encoderDrive(TRANSLATE_SPEED, 40, 40, 3);
-        encoderDrive(TRANSLATE_SPEED, -5, -5, 2);
-        encoderStrafe(TRANSLATE_SPEED, -6, -6, 2);
-        encoderDrive(TRANSLATE_SPEED, 17, -17, 2);
+        // slower auton
+
+//        encoderDrive(TRANSLATE_SPEED, 40, 40, 3);
+//        encoderDrive(TRANSLATE_SPEED, -5, -5, 2);
+//        encoderStrafe(TRANSLATE_SPEED, -6, -6, 2);
+//        encoderDrive(TRANSLATE_SPEED, 17, -17, 2);
+//        manipOpen();
+//        encoderDrive(TRANSLATE_SPEED, 6, 6, 2);
+//        manipClose();
+//        encoderDrive(TRANSLATE_SPEED, -17, 17, 2);
+//        encoderDrive(TRANSLATE_SPEED, -24, -24, 2);
+//        encoderDrive(TRANSLATE_SPEED, -17, 17, 2);
+//        encoderDrive(TRANSLATE_SPEED, 25, 25, 2);
+//        manipOpen();
+
+        // faster auton
+        encoderDrive(TRANSLATE_SPEED, 40, 40);
+        encoderDrive(TRANSLATE_SPEED, -5, -5);
+        encoderStrafe(TRANSLATE_SPEED, -6, -6);
+        encoderDrive(TRANSLATE_SPEED, 17, -17);
         manipOpen();
-        encoderDrive(TRANSLATE_SPEED, 6, 6, 2);
+        encoderDrive(TRANSLATE_SPEED, 6, 6);
         manipClose();
-        encoderDrive(TRANSLATE_SPEED, -17, 17, 2);
-        encoderDrive(TRANSLATE_SPEED, -24, -24, 2);
-        encoderDrive(TRANSLATE_SPEED, -17, 17, 2);
-        encoderDrive(TRANSLATE_SPEED, 25, 25, 2);
+        encoderDrive(TRANSLATE_SPEED, -17, 17);
+        encoderDrive(TRANSLATE_SPEED, -24, -24);
+        encoderDrive(TRANSLATE_SPEED, -17, 17);
+        encoderDrive(TRANSLATE_SPEED, 25, 25);
         manipOpen();
 //        encoderStrafe(TRANSLATE_SPEED, 48, -48, 5); //shifting right
     }
 
-    public void encoderStrafe(double vel, double leftShift, double rightShift, double dt) {
+    public void encoderStrafe(double vel, double leftShift, double rightShift) {
         int leftFrontTarget, leftBackTarget, rightFrontTarget, rightBackTarget;
 
         if (opModeIsActive()) {
@@ -109,7 +125,8 @@ public class AutonRedClose extends LinearOpMode {
 
             setMotorPowers(vel);
 
-            while (opModeIsActive() && (runtime.seconds() < dt)) {
+//            while (opModeIsActive() && (runtime.seconds() < dt)) {
+            while (opModeIsActive() && leftFront.isBusy() && leftBack.isBusy() && rightFront.isBusy() && rightBack.isBusy()) {
 
             }
 
@@ -122,7 +139,7 @@ public class AutonRedClose extends LinearOpMode {
         }
     }
 
-    public void encoderDrive(double vel, double leftShift, double rightShift, double dt) {
+    public void encoderDrive(double vel, double leftShift, double rightShift) {
         int leftFrontTarget, leftBackTarget, rightFrontTarget, rightBackTarget;
 
         if (opModeIsActive()) {
@@ -144,7 +161,8 @@ public class AutonRedClose extends LinearOpMode {
             runtime.reset();
             setMotorPowers(vel);
 
-            while (opModeIsActive() && (runtime.seconds() < dt)) {
+//            while (opModeIsActive() && (runtime.seconds() < dt)) {
+            while (opModeIsActive() && leftFront.isBusy() && leftBack.isBusy() && rightFront.isBusy() && rightBack.isBusy()) {
 
             }
 

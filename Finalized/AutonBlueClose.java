@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="AutonBlue", group="DriveTrain")
+@Autonomous(name = "AutonBlue", group = "DriveTrain")
 public class AutonBlueClose extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime(); //game timer
 
@@ -71,29 +71,45 @@ public class AutonBlueClose extends LinearOpMode {
     }
 
     public void autonInstructions() {
-        encoderDrive(TRANSLATE_SPEED, 40, 40, 3);
-        encoderDrive(TRANSLATE_SPEED, -3, -3, 2);
-        encoderStrafe(TRANSLATE_SPEED, 8, 8, 2);
-        encoderDrive(TRANSLATE_SPEED, -17, 17, 2);
+        // slower auton
+
+//        encoderDrive(TRANSLATE_SPEED, 40, 40, 3);
+//        encoderDrive(TRANSLATE_SPEED, -5, -5, 2);
+//        encoderStrafe(TRANSLATE_SPEED, -6, -6, 2);
+//        encoderDrive(TRANSLATE_SPEED, 17, -17, 2);
+//        manipOpen();
+//        encoderDrive(TRANSLATE_SPEED, 6, 6, 2);
+//        manipClose();
+//        encoderDrive(TRANSLATE_SPEED, -17, 17, 2);
+//        encoderDrive(TRANSLATE_SPEED, -24, -24, 2);
+//        encoderDrive(TRANSLATE_SPEED, -17, 17, 2);
+//        encoderDrive(TRANSLATE_SPEED, 25, 25, 2);
+//        manipOpen();
+
+        // faster auton
+        encoderDrive(TRANSLATE_SPEED, 40, 40);
+        encoderDrive(TRANSLATE_SPEED, -3, -3);
+        encoderStrafe(TRANSLATE_SPEED, 8, 8);
+        encoderDrive(TRANSLATE_SPEED, -17, 17);
         manipOpen();
-        encoderDrive(TRANSLATE_SPEED, 7, 7, 2);
+        encoderDrive(TRANSLATE_SPEED, 7, 7);
         manipClose();
-        encoderDrive(TRANSLATE_SPEED, 17, -17, 2);
-        encoderDrive(TRANSLATE_SPEED, -24, -24, 2);
-        encoderDrive(TRANSLATE_SPEED, 17, -17, 2);
-        encoderDrive(TRANSLATE_SPEED, 28, 28, 2);
+        encoderDrive(TRANSLATE_SPEED, 17, -17);
+        encoderDrive(TRANSLATE_SPEED, -24, -24);
+        encoderDrive(TRANSLATE_SPEED, 17, -17);
+        encoderDrive(TRANSLATE_SPEED, 28, 28);
         manipOpen();
 //        encoderStrafe(TRANSLATE_SPEED, 48, -48, 5); //shifting right
     }
 
-    public void encoderStrafe(double vel, double leftShift, double rightShift, double dt) {
+    public void encoderStrafe(double vel, double leftShift, double rightShift) {
         int leftFrontTarget, leftBackTarget, rightFrontTarget, rightBackTarget;
 
         if (opModeIsActive()) {
-            leftFrontTarget = leftFront.getCurrentPosition() - (int)(leftShift * COUNTS_PER_INCH);
-            leftBackTarget = leftBack.getCurrentPosition() + (int)(leftShift * COUNTS_PER_INCH);
-            rightFrontTarget = rightFront.getCurrentPosition() + (int)(rightShift * COUNTS_PER_INCH);
-            rightBackTarget = rightBack.getCurrentPosition() - (int)(rightShift * COUNTS_PER_INCH);
+            leftFrontTarget = leftFront.getCurrentPosition() - (int) (leftShift * COUNTS_PER_INCH);
+            leftBackTarget = leftBack.getCurrentPosition() + (int) (leftShift * COUNTS_PER_INCH);
+            rightFrontTarget = rightFront.getCurrentPosition() + (int) (rightShift * COUNTS_PER_INCH);
+            rightBackTarget = rightBack.getCurrentPosition() - (int) (rightShift * COUNTS_PER_INCH);
 
             leftFront.setTargetPosition(leftFrontTarget);
             leftBack.setTargetPosition(leftBackTarget);
@@ -109,7 +125,8 @@ public class AutonBlueClose extends LinearOpMode {
 
             setMotorPowers(vel);
 
-            while (opModeIsActive() && (runtime.seconds() < dt)) {
+//            while (opModeIsActive() && (runtime.seconds() < dt)) {
+            while (opModeIsActive() && leftFront.isBusy() && leftBack.isBusy() && rightFront.isBusy() && rightBack.isBusy()) {
 
             }
 
@@ -122,14 +139,14 @@ public class AutonBlueClose extends LinearOpMode {
         }
     }
 
-    public void encoderDrive(double vel, double leftShift, double rightShift, double dt) {
+    public void encoderDrive(double vel, double leftShift, double rightShift) {
         int leftFrontTarget, leftBackTarget, rightFrontTarget, rightBackTarget;
 
         if (opModeIsActive()) {
-            leftFrontTarget = leftFront.getCurrentPosition() + (int)(leftShift * COUNTS_PER_INCH);
-            leftBackTarget = leftBack.getCurrentPosition() + (int)(leftShift * COUNTS_PER_INCH);
-            rightFrontTarget = rightFront.getCurrentPosition() + (int)(rightShift * COUNTS_PER_INCH);
-            rightBackTarget = rightBack.getCurrentPosition() + (int)(rightShift * COUNTS_PER_INCH);
+            leftFrontTarget = leftFront.getCurrentPosition() + (int) (leftShift * COUNTS_PER_INCH);
+            leftBackTarget = leftBack.getCurrentPosition() + (int) (leftShift * COUNTS_PER_INCH);
+            rightFrontTarget = rightFront.getCurrentPosition() + (int) (rightShift * COUNTS_PER_INCH);
+            rightBackTarget = rightBack.getCurrentPosition() + (int) (rightShift * COUNTS_PER_INCH);
 
             leftFront.setTargetPosition(leftFrontTarget);
             leftBack.setTargetPosition(leftBackTarget);
@@ -144,7 +161,8 @@ public class AutonBlueClose extends LinearOpMode {
             runtime.reset();
             setMotorPowers(vel);
 
-            while (opModeIsActive() && (runtime.seconds() < dt)) {
+//            while (opModeIsActive() && (runtime.seconds() < dt)) {
+            while (opModeIsActive() && leftFront.isBusy() && leftBack.isBusy() && rightFront.isBusy() && rightBack.isBusy()) {
 
             }
 
