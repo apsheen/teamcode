@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="AutonRed", group="DriveTrain")
-public class AutonRedClose extends LinearOpMode {
+@Autonomous(name="AutonBlue", group="DriveTrain")
+public class AutonBlueClose extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime(); //game timer
 
     //motor objects -- private
@@ -72,16 +72,16 @@ public class AutonRedClose extends LinearOpMode {
 
     public void autonInstructions() {
         encoderDrive(TRANSLATE_SPEED, 40, 40, 3);
-        encoderDrive(TRANSLATE_SPEED, -5, -5, 2);
-        encoderStrafe(TRANSLATE_SPEED, -6, -6, 2);
-        encoderDrive(TRANSLATE_SPEED, 17, -17, 2);
+        encoderDrive(TRANSLATE_SPEED, -3, -3, 2);
+        encoderStrafe(TRANSLATE_SPEED, 8, 8, 2);
+        encoderDrive(TRANSLATE_SPEED, -17, 17, 2);
         manipOpen();
-        encoderDrive(TRANSLATE_SPEED, 6, 6, 2);
+        encoderDrive(TRANSLATE_SPEED, 7, 7, 2);
         manipClose();
-        encoderDrive(TRANSLATE_SPEED, -17, 17, 2);
+        encoderDrive(TRANSLATE_SPEED, 17, -17, 2);
         encoderDrive(TRANSLATE_SPEED, -24, -24, 2);
-        encoderDrive(TRANSLATE_SPEED, -17, 17, 2);
-        encoderDrive(TRANSLATE_SPEED, 25, 25, 2);
+        encoderDrive(TRANSLATE_SPEED, 17, -17, 2);
+        encoderDrive(TRANSLATE_SPEED, 28, 28, 2);
         manipOpen();
 //        encoderStrafe(TRANSLATE_SPEED, 48, -48, 5); //shifting right
     }
