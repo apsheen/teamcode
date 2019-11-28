@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -11,16 +12,18 @@ import com.qualcomm.robotcore.util.Range;
 public class BettaTeleOp extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime(); //game timer
 
-    private DcMotor leftFront;
-    private DcMotor leftBack;
-    private DcMotor rightFront;
-    private DcMotor rightBack;
-
-    private DcMotor liftL;
-    private DcMotor liftR;
-    private DcMotor manipM;
-
-//    private Servo foundationServo;
+    /*
+    Motors, sensors, and servos' declarations
+     */
+    public DcMotor fl;
+    public DcMotor fr;
+    public DcMotor bl;
+    public DcMotor br;
+    public DcMotor liftL;
+    public DcMotor liftR;
+    public DcMotor manip;
+    public GyroSensor gyro;
+//    public Servo fMover;
 
     /*
     Teleop parameters
@@ -74,23 +77,23 @@ public class BettaTeleOp extends LinearOpMode {
      * Sends motors, sensors, and servos to hardware map
      */
     public void init_motors() {
-        leftFront = hardwareMap.get(DcMotor.class, "leftFront");
-        leftBack = hardwareMap.get(DcMotor.class, "leftBack");
-        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
-        rightBack = hardwareMap.get(DcMotor.class, "rightBack");
+        fl = hardwareMap.get(DcMotor.class, "leftFront");
+        bl = hardwareMap.get(DcMotor.class, "leftBack");
+        fr = hardwareMap.get(DcMotor.class, "rightFront");
+        br = hardwareMap.get(DcMotor.class, "rightBack");
 
         liftL = hardwareMap.get(DcMotor.class, "liftL");
         liftR = hardwareMap.get(DcMotor.class, "liftR");
-        manipM = hardwareMap.get(DcMotor.class, "manipM");
+        manip = hardwareMap.get(DcMotor.class, "manipM");
 
-        leftFront.setDirection(DcMotor.Direction.FORWARD);
-        leftBack.setDirection(DcMotor.Direction.FORWARD);
-        rightFront.setDirection(DcMotor.Direction.REVERSE);
-        rightBack.setDirection(DcMotor.Direction.REVERSE);
+        fl.setDirection(DcMotor.Direction.FORWARD);
+        bl.setDirection(DcMotor.Direction.FORWARD);
+        fr.setDirection(DcMotor.Direction.REVERSE);
+        br.setDirection(DcMotor.Direction.REVERSE);
 
         liftL.setDirection(DcMotor.Direction.REVERSE);
         liftR.setDirection(DcMotor.Direction.FORWARD);
-        manipM.setDirection(DcMotor.Direction.FORWARD);
+        manip.setDirection(DcMotor.Direction.FORWARD);
 
 //        foundationServo = hardwareMap.get(Servo.class, "foundationMover");
 //        foundationServo.setDirection(Servo.Direction.FORWARD);
@@ -113,16 +116,16 @@ public class BettaTeleOp extends LinearOpMode {
         v4 = Range.clip(driveV - strafeV - rotateV, -1, 1);
 
         if (ninja_mode) {
-            leftFront.setPower(v1 / 2);
-            leftBack.setPower(v2 / 2);
-            rightFront.setPower(v3 / 2);
-            rightBack.setPower(v4 / 2);
+            fl.setPower(v1 / 2);
+            bl.setPower(v2 / 2);
+            fr.setPower(v3 / 2);
+            br.setPower(v4 / 2);
         }
         else {
-            leftFront.setPower(v1);
-            leftBack.setPower(v2);
-            rightFront.setPower(v3);
-            rightBack.setPower(v4);
+            fl.setPower(v1);
+            bl.setPower(v2);
+            fr.setPower(v3);
+            br.setPower(v4);
         }
 
     }
@@ -155,7 +158,7 @@ public class BettaTeleOp extends LinearOpMode {
             else {
                 manipV = .25;
             }
-            manipM.setPower(manipV);
+            manip.setPower(manipV);
         }
         else if (this.gamepad2.right_bumper) {
             if (ninja_mode) {
@@ -164,10 +167,10 @@ public class BettaTeleOp extends LinearOpMode {
             else {
                 manipV = -.25;
             }
-            manipM.setPower(manipV);
+            manip.setPower(manipV);
         } else {
             manipV = 0;
-            manipM.setPower(manipV);
+            manip.setPower(manipV);
         }
     }
 //    public void runFoundationMover() {
