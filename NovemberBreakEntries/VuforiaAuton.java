@@ -27,7 +27,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 public class VuforiaAuton extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime(); //game timer
 
-    robotAuto robot = new robotAuto();
+    BettaAutoTemplate robot = new BettaAutoTemplate();
 
     static final double TRANSLATE_SPEED = 1;
     static final double COUNTS_PER_MOTOR_REV = 1120;
@@ -261,32 +261,30 @@ public class VuforiaAuton extends LinearOpMode {
                 telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
 
                 // auton instructions
-                robot.setMotorPowers(0); // may not be necessary
+                robot.setMotorPowers(0);
                 robot.encoderRun("strafe", TRANSLATE_SPEED, -20, -20,
-                                 0, opModeIsActive());
+                                 0);
                 robot.encoderRun("drive", TRANSLATE_SPEED, 40, 40,
-                                 0, opModeIsActive());
+                                 0);
                 robot.encoderRun("strafe", TRANSLATE_SPEED, -5, -5,
-                                 0,opModeIsActive());
+                                 0);
                 robot.encoderRun("drive", TRANSLATE_SPEED, 17, -17,
-                                 90, opModeIsActive());
-                robot.manipRun("open",
-                               opModeIsActive());
+                                 90);
+                robot.manipRun("open");
                 robot.encoderRun("drive", TRANSLATE_SPEED, 4, 4,
-                                 0, opModeIsActive());
-                robot.manipRun("close",
-                               opModeIsActive());
+                                 0);
+                robot.manipRun("close");
                 robot.encoderRun("drive", TRANSLATE_SPEED, -17, 17,
-                                 90, opModeIsActive());
+                                 90);
                 robot.encoderRun("drive", TRANSLATE_SPEED, -40, -40,
-                                 0, opModeIsActive());
+                                 0);
             }
             else {
                 telemetry.addData("Visible Target", "none");
 
                 // keep strafing until sees skystone
                 robot.encoderRun("strafe", TRANSLATE_SPEED, 32, 32,
-                                 0, opModeIsActive());
+                                 0);
             }
             telemetry.update();
 
