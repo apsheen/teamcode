@@ -126,8 +126,8 @@ public class BettaAutoTemplate {
         runtime.reset();
         setMotorPowers(vel);
 
-        while (fl.isBusy() && bl.isBusy() && fr.isBusy()
-                && br.isBusy() && !onHeading(vel, angle, P_TURN_COEFF)) {
+        while ((fl.isBusy() && bl.isBusy() && fr.isBusy()
+                && br.isBusy()) || !onHeading(vel, angle, P_TURN_COEFF)) {
 
         }
 
@@ -183,7 +183,7 @@ public class BettaAutoTemplate {
     }
 
     /**
-     * Override function for left and right motor powers are set to two distinct velocities
+     * Overload function for left and right motor powers are set to two distinct velocities
      * @param leftV left motors velocity
      * @param rightV right motors velocity
      */
@@ -195,7 +195,6 @@ public class BettaAutoTemplate {
     }
 
     /**
-     *
      * @param speed robot current speed
      * @param angle robot target angle
      * @param PCoeff proportional gain coefficient
@@ -225,7 +224,6 @@ public class BettaAutoTemplate {
     }
 
     /**
-     *
      * @param targetAngle desired robot angle to turn in
      * @return returns robot angle error
      */
@@ -245,7 +243,6 @@ public class BettaAutoTemplate {
     }
 
     /**
-     *
      * @param error
      * @param PCoeff
      * @return returns desires steer force

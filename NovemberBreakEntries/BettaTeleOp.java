@@ -34,7 +34,7 @@ public class BettaTeleOp extends LinearOpMode {
     double v4;
     double liftLV;
     double liftRV;
-    double manipV = 0;
+    double manipV;
 //    double position;
 
     boolean ninja_mode;
