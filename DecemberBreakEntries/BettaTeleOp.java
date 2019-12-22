@@ -9,24 +9,19 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 /**
+ * gamepad1 joysticks: drive train ✔
+ * gamepad2 joysticks: intake  ✔
 
- gamepad1 joysticks: drive train ✔
- gamepad2 joysticks: intake  ✔
+ * gamepad1 trigger: transfer
+ * gamepad2 trigger: lift ✔
 
- gamepad1 trigger: transfer
- gamepad2 trigger: lift ✔
+ * gamepad1 bumpers: manipulator ✔
+ * gamepad2 bumpers: foundation mover ✔
 
- gamepad1 bumpers: manipulator ✔
- gamepad2 bumpers: foundation mover ✔
-
-
- change manip name in phone
- joystick bumper destroyed
-
+ * change manip name in phone
+ * joystick bumper destroyed
 
  */
-
-
 
 @TeleOp
 public class BettaTeleOp extends LinearOpMode {
