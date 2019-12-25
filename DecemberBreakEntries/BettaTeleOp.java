@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -18,9 +19,12 @@ import com.qualcomm.robotcore.util.Range;
  * gamepad1 bumpers: manipulator ✔
  * gamepad2 bumpers: foundation mover ✔
 
- * change manip name in phone
  * joystick bumper destroyed
+ * plug in encoders to lift
 
+ * change manip name in phone
+ * change lift name in phone to just one
+ * add intakeL, intakeR, fMoverL, fMoverR to config
  */
 
 @TeleOp
@@ -34,8 +38,7 @@ public class BettaTeleOp extends LinearOpMode {
     public DcMotor fr;
     public DcMotor bl;
     public DcMotor br;
-    public DcMotor liftL;
-    public DcMotor liftR;
+    public DcMotor lift;
     public Servo manip;
     public GyroSensor gyro;
     public Servo fMoverL;
@@ -46,12 +49,14 @@ public class BettaTeleOp extends LinearOpMode {
     /*
     Teleop parameters
      */
-    double v1, v2, v3, v4;
-    double liftLV, liftRV;
-    double manipPos;
-    double fPos;
-    double driveV, strafeV, rotateV;
-    double intakeV;
+    double v1, v2, v3, v4;  // drive train velocity
+    double driveV, strafeV, rotateV;  // drive, strafe, and rotate vectors
+    double liftV;  // lift velocity
+    double intakeV;  // intake velocity
+    double manipPos;  // manipulator position
+    double fPos;  // foundation mover position
+
+    int liftTargPos;  // lift target position
 
     boolean ninja_mode;
 
@@ -76,7 +81,7 @@ public class BettaTeleOp extends LinearOpMode {
             runDrive(ninja_mode);  //run drive train
             runLift();  //run lift
             runManipulator();  //run manipulator
-            runFoundationMover();  //run foundatio mover
+            runFoundationMover();  //run foundation mover
             runIntake();  //run intake
 
             // debugging information
@@ -84,8 +89,7 @@ public class BettaTeleOp extends LinearOpMode {
             telemetry.addData("lb power", v2);
             telemetry.addData("rf power", v3);
             telemetry.addData("rb power", v4);
-            telemetry.addData("l-lift power", liftLV);
-            telemetry.addData("r-lift power", liftRV);
+            telemetry.addData("lift power", liftV);
             telemetry.addData("manip pos", manip);
             telemetry.addData("f pos", fPos);
 
@@ -109,12 +113,10 @@ public class BettaTeleOp extends LinearOpMode {
         br.setDirection(DcMotor.Direction.REVERSE);
 
         // lift and manip
-        liftL = hardwareMap.get(DcMotor.class, "liftL");
-        liftR = hardwareMap.get(DcMotor.class, "liftR");
+        lift = hardwareMap.get(DcMotor.class, "lift");
         manip = hardwareMap.get(Servo.class, "manip");
 
-        liftL.setDirection(DcMotor.Direction.REVERSE);
-        liftR.setDirection(DcMotor.Direction.FORWARD);
+        lift.setDirection(DcMotor.Direction.FORWARD);
         manip.setDirection(Servo.Direction.FORWARD);
 
         // intake
@@ -139,7 +141,7 @@ public class BettaTeleOp extends LinearOpMode {
         telemetry.update();
     }
 
-    /**
+    /*
      Gamepad1 sector
      */
 
@@ -186,7 +188,12 @@ public class BettaTeleOp extends LinearOpMode {
         manip.setPosition(manipPos);
     }
 
-    /**
+    /*
+    End gamepad1 sector
+     */
+
+
+    /*
     Gamepad2 sector
      */
 
@@ -201,21 +208,27 @@ public class BettaTeleOp extends LinearOpMode {
     // gamepad2 trigger
     public void runLift() {
         if (this.gamepad2.left_trigger != 0) {
-            liftLV = this.gamepad2.left_trigger;
-            liftRV = this.gamepad2.left_trigger;
-
-            liftL.setPower(liftLV);
-            liftR.setPower(liftRV);
+            liftV = this.gamepad2.left_trigger;
+            lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);  // run w/o encoder
+            lift.setPower(liftV);
         }
         else if (this.gamepad2.right_trigger != 0) {
-            liftLV = -this.gamepad2.right_trigger;
-            liftRV = -this.gamepad2.right_trigger;
-
-            liftL.setPower(liftLV);
-            liftR.setPower(liftRV);
+            liftV = -this.gamepad2.right_trigger;
+            lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);  // run w/o encoder
+            lift.setPower(liftV);
         } else {
-            liftL.setPower(0);
-            liftR.setPower(0);
+            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);  // run w/ encoder
+
+            liftTargPos = lift.getCurrentPosition();
+            lift.setTargetPosition(liftTargPos);  // run to its current position
+
+            // make sure lift stays in its current position
+            if (lift.getCurrentPosition() < liftTargPos) {
+                lift.setPower(1);
+            }
+            else if (lift.getCurrentPosition() > liftTargPos) {
+                lift.setPower(-1);
+            }
         }
     }
 
@@ -230,4 +243,8 @@ public class BettaTeleOp extends LinearOpMode {
         fMoverL.setPosition(fPos);
         fMoverR.setPosition(fPos);
     }
+
+    /*
+    End gamepad2 sector
+     */
 }

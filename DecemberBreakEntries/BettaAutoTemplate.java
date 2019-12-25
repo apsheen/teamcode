@@ -14,14 +14,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 /**
- * set up foundation mover
  * set up lift
- * add intakeL, intakeR, fMoverL, fMoverR to config
- * possibly stall lift
- * run intake for whole autonomous period?
  * transfer
- * plug in encoders to intake
- * figure out how many revolutions it takes to intake a block
  */
 
 
@@ -67,8 +61,7 @@ public class BettaAutoTemplate {
     Class parameters
      */
     private int leftFrontTarget, leftBackTarget, rightFrontTarget, rightBackTarget;
-    private int intakeLTarget, intakeRTarget;
-    public int distanceFromBridge;
+    public int dfb = 30; // distance from bridge
     private HardwareMap hwMap;
 
     /** Constructors */
@@ -151,14 +144,14 @@ public class BettaAutoTemplate {
     public void runDrive(String movementType, double vel, double leftShift, double rightShift,
                            double angle) {
         // strafe
-        if (movementType.equals("strafe")) {
+        if (movementType.equals("s")) {
             leftFrontTarget = fl.getCurrentPosition() - (int) (leftShift * COUNTS_PER_INCH);
             leftBackTarget = bl.getCurrentPosition() + (int) (leftShift * COUNTS_PER_INCH);
             rightFrontTarget = fr.getCurrentPosition() + (int) (rightShift * COUNTS_PER_INCH);
             rightBackTarget = br.getCurrentPosition() - (int) (rightShift * COUNTS_PER_INCH);
         }
         // drive
-        else if (movementType.equals("drive")) {
+        else if (movementType.equals("d")) {
             leftFrontTarget = fl.getCurrentPosition() + (int) (leftShift * COUNTS_PER_INCH);
             leftBackTarget = bl.getCurrentPosition() + (int) (leftShift * COUNTS_PER_INCH);
             rightFrontTarget = fr.getCurrentPosition() + (int) (rightShift * COUNTS_PER_INCH);
@@ -199,46 +192,68 @@ public class BettaAutoTemplate {
      */
     public void runIntake(String movementType) {
         if (movementType.equals("in")) {
-            intakeLTarget = intakeL.getCurrentPosition() + 3000;
-            intakeLTarget = intakeR.getCurrentPosition() + 3000;
-
-            intakeL.setTargetPosition(intakeLTarget);
-            intakeR.setTargetPosition(intakeRTarget);
-
-            intakeL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            intakeR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            while (intakeL.isBusy() && intakeR.isBusy()) {
-                intakeL.setPower(1);
-                intakeR.setPower(1);
-            }
-
-            intakeL.setPower(0);
-            intakeR.setPower(0);
-
-            intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            intakeR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            intakeLTarget = intakeL.getCurrentPosition() + 3000;
+//            intakeLTarget = intakeR.getCurrentPosition() + 3000;
+//
+//            intakeL.setTargetPosition(intakeLTarget);
+//            intakeR.setTargetPosition(intakeRTarget);
+//
+//            intakeL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            intakeR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//            while (intakeL.isBusy() && intakeR.isBusy()) {
+//                intakeL.setPower(1);
+//                intakeR.setPower(1);
+//            }
+//
+//            intakeL.setPower(0);
+//            intakeR.setPower(0);
+//
+//            intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            intakeR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            intakeL.setPower(1);
+            intakeR.setPower(1);
         }
         else if (movementType.equals("out")) {
-            intakeLTarget = intakeL.getCurrentPosition() - 3000;
-            intakeLTarget = intakeR.getCurrentPosition() - 3000;
-
-            intakeL.setTargetPosition(intakeLTarget);
-            intakeR.setTargetPosition(intakeRTarget);
-
-            intakeL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            intakeR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            while (intakeL.isBusy() && intakeR.isBusy()) {
-                intakeL.setPower(1);
-                intakeR.setPower(1);
-            }
-
+//            intakeLTarget = intakeL.getCurrentPosition() - 3000;
+//            intakeLTarget = intakeR.getCurrentPosition() - 3000;
+//
+//            intakeL.setTargetPosition(intakeLTarget);
+//            intakeR.setTargetPosition(intakeRTarget);
+//
+//            intakeL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//            intakeR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//
+//            while (intakeL.isBusy() && intakeR.isBusy()) {
+//                intakeL.setPower(1);
+//                intakeR.setPower(1);
+//            }
+//
+//            intakeL.setPower(0);
+//            intakeR.setPower(0);
+//
+//            intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            intakeR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            intakeL.setPower(-1);
+            intakeR.setPower(-1);
+        }
+        else if (movementType.equals("stop")) {
             intakeL.setPower(0);
             intakeR.setPower(0);
+        }
+    }
 
-            intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            intakeR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    /**
+     * Runs foundation mover
+     */
+    public void runFoundationMover(String movementType) {
+        if (movementType.equals("down")) {
+            fMoverL.setPosition(1);
+            fMoverR.setPosition(1);
+        }
+        else if (movementType.equals("up")) {
+            fMoverL.setPosition(0);
+            fMoverR.setPosition(0);
         }
     }
 
