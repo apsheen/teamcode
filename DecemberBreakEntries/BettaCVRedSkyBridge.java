@@ -92,7 +92,7 @@ public class BettaCVRedSkyBridge extends LinearOpMode {
     public void runVisionSector() {
         // ram into the skystone right away b/c auton sector starts right after
         if (valLeft == 0) {
-            robot.runDrive("d", robot.TRANSLATE_SPEED, 20, 12, 0);
+            robot.runDrive("ds", robot.TRANSLATE_SPEED, 12, 20, 0);
 
             robot.dfb += 8;
         }
@@ -100,7 +100,7 @@ public class BettaCVRedSkyBridge extends LinearOpMode {
             robot.runDrive("d", robot.TRANSLATE_SPEED, 20, 20, 0);
         }
         else if (valRight == 0) {
-            robot.runDrive("d", robot.TRANSLATE_SPEED, 12, 20, 0);
+            robot.runDrive("ds", robot.TRANSLATE_SPEED, 20, 12, 0);
 
             robot.dfb -= 8;
         }

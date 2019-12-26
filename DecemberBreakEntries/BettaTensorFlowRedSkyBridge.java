@@ -97,36 +97,29 @@ public class BettaTensorFlowRedSkyBridge extends LinearOpMode {
                         if (middlex < 270) {
                             telemetry.addLine("robot should go left");
 
-                            // go left and strafe into skystone
+                            // go forward and strafe into skystone
                             robot.setMotorPowers(0);
-                            robot.runDrive("d", robot.TRANSLATE_SPEED,
-                                    4, 4, 0);
-                            robot.runDrive("s", robot.TRANSLATE_SPEED,
-                                    -30, -30, 0);
+                            robot.runDrive("ds", robot.TRANSLATE_SPEED, 12, 20, 0);
 
                             // distance from bridge is shorter
-                            robot.dfb -= 4;
+                            robot.dfb += 8;
                         }
                         // if robot is left of skystone
                         else if (middlex > 370) {
                             telemetry.addLine("robot should go right");
 
-                            // go right and strafe into skystone
+                            // go forward and strafe into skystone
                             robot.setMotorPowers(0);
-                            robot.runDrive("d", robot.TRANSLATE_SPEED,
-                                    -4, -4, 0);
-                            robot.runDrive("s", robot.TRANSLATE_SPEED,
-                                    -30, -30, 0);
+                            robot.runDrive("ds", robot.TRANSLATE_SPEED, 20, 12, 0);
 
                             // distance from bridge is farther
-                            robot.dfb += 4;
+                            robot.dfb -= 8;
                         } else {
                             telemetry.addLine("robot in center");
 
-                            // strafe into skystone
+                            // drive into skystone
                             robot.setMotorPowers(0);
-                            robot.runDrive("s", robot.TRANSLATE_SPEED,
-                                    -30, -30, 0);
+                            robot.runDrive("d", robot.TRANSLATE_SPEED, 20, 20, 0);
                         }
                         break;
                     }
@@ -138,27 +131,24 @@ public class BettaTensorFlowRedSkyBridge extends LinearOpMode {
 
     public void runAutonomousSector() {
         if (i == 0) {
-            robot.runDrive("s", robot.TRANSLATE_SPEED, 4, 4, 0);
-            robot.runDrive("d", robot.TRANSLATE_SPEED, -17, 17, 90);
             robot.runIntake("in");
             robot.runDrive("d", robot.TRANSLATE_SPEED, 6, 6, 0);
             robot.runIntake("stop");
-            robot.runDrive("d", robot.TRANSLATE_SPEED, -15, -15, 0);
-            robot.runDrive("d", robot.TRANSLATE_SPEED, 17, -17, -90);
+            robot.runDrive("d", robot.TRANSLATE_SPEED, -11, -11, 0);
+            robot.runDrive("d", robot.TRANSLATE_SPEED, 17, -17, 90);
             robot.runDrive("d", robot.TRANSLATE_SPEED, robot.dfb + 11,
                     robot.dfb + 11, 0);
             robot.runIntake("out");
             robot.runDrive("d", robot.TRANSLATE_SPEED, -59, -59, 0);
+            robot.runDrive("d", robot.TRANSLATE_SPEED, -17, 17, -90);
             robot.dfb = 48;
         }
         else if (i == 1) {
-            robot.runDrive("s", robot.TRANSLATE_SPEED, 4, 4, 0);
-            robot.runDrive("d", robot.TRANSLATE_SPEED, -17, 17, 90);
             robot.runIntake("in");
             robot.runDrive("d", robot.TRANSLATE_SPEED, 6, 6, 0);
             robot.runIntake("stop");
-            robot.runDrive("d", robot.TRANSLATE_SPEED, -15, -15, 0);
-            robot.runDrive("d", robot.TRANSLATE_SPEED, 17, -17, -90);
+            robot.runDrive("d", robot.TRANSLATE_SPEED, -11, -11, 0);
+            robot.runDrive("d", robot.TRANSLATE_SPEED, 17, -17, 90);
             robot.runDrive("d", robot.TRANSLATE_SPEED, robot.dfb + 11,
                     robot.dfb + 11, 0);
             robot.runIntake("out");

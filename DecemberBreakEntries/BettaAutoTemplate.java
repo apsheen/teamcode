@@ -49,6 +49,7 @@ public class BettaAutoTemplate {
     static final double COUNTS_PER_MOTOR_REV = 560;
     static final double WHEEL_DIAMETER_INCHES = 77.0 / 25.4;
     static final double COUNTS_PER_INCH = COUNTS_PER_MOTOR_REV / (WHEEL_DIAMETER_INCHES * Math.PI);
+    private int leftRev, rightRev;
 
     /*
     IMU parameters
@@ -143,19 +144,27 @@ public class BettaAutoTemplate {
      */
     public void runDrive(String movementType, double vel, double leftShift, double rightShift,
                            double angle) {
+        leftRev = (int) (leftShift * COUNTS_PER_INCH);
+        rightRev = (int) (rightShift * COUNTS_PER_INCH);
         // strafe
         if (movementType.equals("s")) {
-            leftFrontTarget = fl.getCurrentPosition() - (int) (leftShift * COUNTS_PER_INCH);
-            leftBackTarget = bl.getCurrentPosition() + (int) (leftShift * COUNTS_PER_INCH);
-            rightFrontTarget = fr.getCurrentPosition() + (int) (rightShift * COUNTS_PER_INCH);
-            rightBackTarget = br.getCurrentPosition() - (int) (rightShift * COUNTS_PER_INCH);
+            leftFrontTarget = fl.getCurrentPosition() - leftRev;
+            leftBackTarget = bl.getCurrentPosition() + leftRev;
+            rightFrontTarget = fr.getCurrentPosition() + rightRev;
+            rightBackTarget = br.getCurrentPosition() - rightRev;
         }
         // drive
         else if (movementType.equals("d")) {
-            leftFrontTarget = fl.getCurrentPosition() + (int) (leftShift * COUNTS_PER_INCH);
-            leftBackTarget = bl.getCurrentPosition() + (int) (leftShift * COUNTS_PER_INCH);
-            rightFrontTarget = fr.getCurrentPosition() + (int) (rightShift * COUNTS_PER_INCH);
-            rightBackTarget = br.getCurrentPosition() + (int) (rightShift * COUNTS_PER_INCH);
+            leftFrontTarget = fl.getCurrentPosition() + leftRev;
+            leftBackTarget = bl.getCurrentPosition() + leftRev;
+            rightFrontTarget = fr.getCurrentPosition() + rightRev;
+            rightBackTarget = br.getCurrentPosition() + rightRev;
+        }
+        else if (movementType.equals("ds")) {
+            leftFrontTarget = fl.getCurrentPosition() + leftRev;
+            leftBackTarget = bl.getCurrentPosition() + rightRev;
+            rightFrontTarget = fr.getCurrentPosition() + rightRev;
+            rightBackTarget = br.getCurrentPosition() + leftRev;
         }
 
         // set target position and set mode run to position
@@ -192,48 +201,10 @@ public class BettaAutoTemplate {
      */
     public void runIntake(String movementType) {
         if (movementType.equals("in")) {
-//            intakeLTarget = intakeL.getCurrentPosition() + 3000;
-//            intakeLTarget = intakeR.getCurrentPosition() + 3000;
-//
-//            intakeL.setTargetPosition(intakeLTarget);
-//            intakeR.setTargetPosition(intakeRTarget);
-//
-//            intakeL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            intakeR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//
-//            while (intakeL.isBusy() && intakeR.isBusy()) {
-//                intakeL.setPower(1);
-//                intakeR.setPower(1);
-//            }
-//
-//            intakeL.setPower(0);
-//            intakeR.setPower(0);
-//
-//            intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            intakeR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             intakeL.setPower(1);
             intakeR.setPower(1);
         }
         else if (movementType.equals("out")) {
-//            intakeLTarget = intakeL.getCurrentPosition() - 3000;
-//            intakeLTarget = intakeR.getCurrentPosition() - 3000;
-//
-//            intakeL.setTargetPosition(intakeLTarget);
-//            intakeR.setTargetPosition(intakeRTarget);
-//
-//            intakeL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//            intakeR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//
-//            while (intakeL.isBusy() && intakeR.isBusy()) {
-//                intakeL.setPower(1);
-//                intakeR.setPower(1);
-//            }
-//
-//            intakeL.setPower(0);
-//            intakeR.setPower(0);
-//
-//            intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-//            intakeR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             intakeL.setPower(-1);
             intakeR.setPower(-1);
         }
