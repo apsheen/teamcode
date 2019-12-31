@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -85,10 +86,10 @@ public class BettaAutoTemplate {
         br = hwMap.get(DcMotor.class, "rightBack");
 
         // set drive train motors' directions
-        fl.setDirection(DcMotor.Direction.FORWARD);
-        bl.setDirection(DcMotor.Direction.FORWARD);
-        fr.setDirection(DcMotor.Direction.REVERSE);
-        br.setDirection(DcMotor.Direction.REVERSE);
+        fl.setDirection(DcMotor.Direction.REVERSE);
+        bl.setDirection(DcMotor.Direction.REVERSE);
+        fr.setDirection(DcMotor.Direction.FORWARD);
+        br.setDirection(DcMotor.Direction.FORWARD);
 
         // reset encoder ticks of drive train
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -108,8 +109,8 @@ public class BettaAutoTemplate {
         intakeR = hwMap.get(DcMotor.class, "intakeR");
 
         // set intake motors' directions
-        intakeL.setDirection(DcMotor.Direction.FORWARD);
-        intakeR.setDirection(DcMotor.Direction.REVERSE);
+        intakeL.setDirection(DcMotor.Direction.REVERSE);
+        intakeR.setDirection(DcMotor.Direction.FORWARD);
 
         // reset encoder ticks of drive train
         intakeL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -161,10 +162,10 @@ public class BettaAutoTemplate {
             rightBackTarget = br.getCurrentPosition() + rightRev;
         }
         else if (movementType.equals("ds")) {
-            leftFrontTarget = fl.getCurrentPosition() + leftRev;
-            leftBackTarget = bl.getCurrentPosition() + rightRev;
-            rightFrontTarget = fr.getCurrentPosition() + rightRev;
-            rightBackTarget = br.getCurrentPosition() + leftRev;
+            leftFrontTarget = fl.getCurrentPosition() + rightRev;
+            leftBackTarget = bl.getCurrentPosition() + leftRev;
+            rightFrontTarget = fr.getCurrentPosition() + leftRev;
+            rightBackTarget = br.getCurrentPosition() + rightRev;
         }
 
         // set target position and set mode run to position

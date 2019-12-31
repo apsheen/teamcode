@@ -67,18 +67,18 @@ public class BettaCVRedSkyBridge extends LinearOpMode {
         phoneCam.setPipeline(new StageSwitchingPipeline());
         phoneCam.startStreaming(rows, cols, OpenCvCameraRotation.UPRIGHT);
 
+        telemetry.addData("Values", valLeft+"   "+valMid+"   "+valRight);
+        telemetry.update();
+
         waitForStart();
         runtime.reset();
         while (opModeIsActive()) {
             telemetry.addData("Values", valLeft+"   "+valMid+"   "+valRight);
-            telemetry.addData("Height", rows);
-            telemetry.addData("Width", cols);
-
             telemetry.update();
+
             sleep(100);
 
             for (i=0; i < 2; ++ i) {
-                sleep(2000);
                 runVisionSector();
                 runAutonomousSector();
             }
@@ -90,42 +90,53 @@ public class BettaCVRedSkyBridge extends LinearOpMode {
     }
 
     public void runVisionSector() {
+        telemetry.addData("Values", valLeft+"   "+valMid+"   "+valRight);
+        telemetry.update();
+
         // ram into the skystone right away b/c auton sector starts right after
         if (valLeft == 0) {
-            robot.runDrive("ds", robot.TRANSLATE_SPEED, 12, 20, 0);
+//            robot.runDrive("ds", robot.TRANSLATE_SPEED, 12, 0, 0);
+            robot.runDrive("s", robot.TRANSLATE_SPEED, -4,
+                    -4, 0);
+            robot.runDrive("d", robot.TRANSLATE_SPEED, 20,
+                    20, 0);
 
-            robot.dfb += 8;
+            robot.dfb += 4;
         }
         else if (valMid == 0) {
             robot.runDrive("d", robot.TRANSLATE_SPEED, 20, 20, 0);
         }
         else if (valRight == 0) {
-            robot.runDrive("ds", robot.TRANSLATE_SPEED, 20, 12, 0);
+//            robot.runDrive("ds", robot.TRANSLATE_SPEED, 0, 12, 0);
+            robot.runDrive("s", robot.TRANSLATE_SPEED, 4,
+                    4, 0);
+            robot.runDrive("d", robot.TRANSLATE_SPEED, 20,
+                    20, 0);
 
-            robot.dfb -= 8;
+            robot.dfb -= 4;
         }
     }
 
     public void runAutonomousSector() {
         if (i == 0) {
             robot.runIntake("in");
-            robot.runDrive("d", robot.TRANSLATE_SPEED, 6, 6, 0);
+            robot.runDrive("d", robot.TRANSLATE_SPEED, 8, 8, 0);
             robot.runIntake("stop");
             robot.runDrive("d", robot.TRANSLATE_SPEED, -11, -11, 0);
-            robot.runDrive("d", robot.TRANSLATE_SPEED, 17, -17, 90);
+            robot.runDrive("d", robot.TRANSLATE_SPEED, 15, -15, 90);
             robot.runDrive("d", robot.TRANSLATE_SPEED, robot.dfb + 11,
                     robot.dfb + 11, 0);
             robot.runIntake("out");
             robot.runDrive("d", robot.TRANSLATE_SPEED, -59, -59, 0);
-            robot.runDrive("d", robot.TRANSLATE_SPEED, -17, 17, -90);
+            robot.runDrive("d", robot.TRANSLATE_SPEED, -15, 15, -90);
             robot.dfb = 48;
         }
         else if (i == 1) {
             robot.runIntake("in");
-            robot.runDrive("d", robot.TRANSLATE_SPEED, 6, 6, 0);
+            robot.runDrive("d", robot.TRANSLATE_SPEED, 8, 8, 0);
             robot.runIntake("stop");
             robot.runDrive("d", robot.TRANSLATE_SPEED, -11, -11, 0);
-            robot.runDrive("d", robot.TRANSLATE_SPEED, 17, -17, 90);
+            robot.runDrive("d", robot.TRANSLATE_SPEED, 15, -15, 90);
             robot.runDrive("d", robot.TRANSLATE_SPEED, robot.dfb + 11,
                     robot.dfb + 11, 0);
             robot.runIntake("out");

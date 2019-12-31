@@ -4,10 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.GyroSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 /**
  * gamepad1 joysticks: drive train ✔
@@ -34,17 +32,11 @@ public class BettaTeleOp extends LinearOpMode {
     /*
     Motors, sensors, and servos' declarations
      */
-    public DcMotor fl;
-    public DcMotor fr;
-    public DcMotor bl;
-    public DcMotor br;
-    public DcMotor lift;
+    public DcMotor fl, fr, bl, br;
+    public DcMotor liftL, liftR;
     public Servo manip;
-    public GyroSensor gyro;
-    public Servo fMoverL;
-    public Servo fMoverR;
-    public DcMotor intakeL;
-    public DcMotor intakeR;
+    public Servo fMoverL, fMoverR;
+    public DcMotor intakeL, intakeR;
 
     /*
     Teleop parameters
@@ -56,7 +48,7 @@ public class BettaTeleOp extends LinearOpMode {
     double manipPos;  // manipulator position
     double fPos;  // foundation mover position
 
-    int liftTargPos;  // lift target position
+    int liftLTargPos, liftRTargPos;  // lift target position
 
     boolean ninja_mode;
 
@@ -89,8 +81,9 @@ public class BettaTeleOp extends LinearOpMode {
             telemetry.addData("lb power", v2);
             telemetry.addData("rf power", v3);
             telemetry.addData("rb power", v4);
+            telemetry.addData("intake power", intakeV);
             telemetry.addData("lift power", liftV);
-            telemetry.addData("manip pos", manip);
+            telemetry.addData("manip pos", manipPos);
             telemetry.addData("f pos", fPos);
 
             telemetry.update();
@@ -107,24 +100,26 @@ public class BettaTeleOp extends LinearOpMode {
         fr = hardwareMap.get(DcMotor.class, "rightFront");
         br = hardwareMap.get(DcMotor.class, "rightBack");
 
-        fl.setDirection(DcMotor.Direction.FORWARD);
-        bl.setDirection(DcMotor.Direction.FORWARD);
-        fr.setDirection(DcMotor.Direction.REVERSE);
-        br.setDirection(DcMotor.Direction.REVERSE);
+        fl.setDirection(DcMotor.Direction.REVERSE);
+        bl.setDirection(DcMotor.Direction.REVERSE);
+        fr.setDirection(DcMotor.Direction.FORWARD);
+        br.setDirection(DcMotor.Direction.FORWARD);
 
         // lift and manip
-        lift = hardwareMap.get(DcMotor.class, "lift");
+        liftL = hardwareMap.get(DcMotor.class, "liftL");
+        liftR = hardwareMap.get(DcMotor.class, "liftR");
         manip = hardwareMap.get(Servo.class, "manip");
 
-        lift.setDirection(DcMotor.Direction.FORWARD);
+        liftL.setDirection(DcMotor.Direction.FORWARD);
+        liftR.setDirection(DcMotor.Direction.FORWARD);
         manip.setDirection(Servo.Direction.FORWARD);
 
         // intake
         intakeL = hardwareMap.get(DcMotor.class, "intakeL");
         intakeR = hardwareMap.get(DcMotor.class, "intakeR");
 
-        intakeL.setDirection(DcMotor.Direction.FORWARD);
-        intakeR.setDirection(DcMotor.Direction.REVERSE);
+        intakeL.setDirection(DcMotor.Direction.REVERSE);
+        intakeR.setDirection(DcMotor.Direction.FORWARD);
 
         // foundation mover
         fMoverL = hardwareMap.get(Servo.class, "fMoverL");
@@ -149,14 +144,13 @@ public class BettaTeleOp extends LinearOpMode {
     public void runDrive(boolean ninja_mode) {
         // values from joystick
         driveV = -this.gamepad1.left_stick_y;
-        strafeV = this.gamepad1.left_stick_x;
+        strafeV = -this.gamepad1.left_stick_x;
         rotateV = this.gamepad1.right_stick_x;
 
-        // clips motor power if < max 1 and > min -1
-        v1 = Range.clip(driveV - strafeV + rotateV, -1, 1);
-        v2 = Range.clip(driveV + strafeV + rotateV, -1, 1);
-        v3 = Range.clip(driveV + strafeV - rotateV, -1, 1);
-        v4 = Range.clip(driveV - strafeV - rotateV, -1, 1);
+        v1 = driveV - strafeV + rotateV;
+        v2 = driveV + strafeV + rotateV;
+        v3 = driveV + strafeV - rotateV;
+        v4 = driveV - strafeV - rotateV;
 
         if (ninja_mode) {
             fl.setPower(v1 / 2);
@@ -199,7 +193,7 @@ public class BettaTeleOp extends LinearOpMode {
 
     // gamepad2 right stick
     public void runIntake() {
-        intakeV = -this.gamepad2.right_stick_y;
+        intakeV = -this.gamepad2.left_stick_y;
 
         intakeL.setPower(intakeV);
         intakeR.setPower(intakeV);
@@ -209,25 +203,43 @@ public class BettaTeleOp extends LinearOpMode {
     public void runLift() {
         if (this.gamepad2.left_trigger != 0) {
             liftV = this.gamepad2.left_trigger;
-            lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);  // run w/o encoder
-            lift.setPower(liftV);
+
+            // run w/o encoder
+            liftL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            liftR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+            liftL.setPower(liftV);
+            liftR.setPower(liftV);
         }
         else if (this.gamepad2.right_trigger != 0) {
             liftV = -this.gamepad2.right_trigger;
-            lift.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);  // run w/o encoder
-            lift.setPower(liftV);
-        } else {
-            lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);  // run w/ encoder
 
-            liftTargPos = lift.getCurrentPosition();
-            lift.setTargetPosition(liftTargPos);  // run to its current position
+            // run w/o encoder
+            liftL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            liftR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+            liftL.setPower(liftV);
+            liftR.setPower(liftV);
+        } else {
+            liftLTargPos = liftL.getCurrentPosition();
+//            liftRTargPos = liftR.getCurrentPosition();
+
+            // run to its current position
+            liftL.setTargetPosition(liftLTargPos);
+            liftR.setTargetPosition(liftLTargPos); // set at same position
+
+            // run w/ encoder
+            liftL.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            liftR.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // make sure lift stays in its current position
-            if (lift.getCurrentPosition() < liftTargPos) {
-                lift.setPower(1);
+            if (liftL.getCurrentPosition() < liftLTargPos) {
+                liftL.setPower(1);
+                liftR.setPower(1);
             }
-            else if (lift.getCurrentPosition() > liftTargPos) {
-                lift.setPower(-1);
+            else if (liftL.getCurrentPosition() > liftLTargPos) {
+                liftL.setPower(-1);
+                liftR.setPower(-1);
             }
         }
     }
