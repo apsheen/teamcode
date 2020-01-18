@@ -105,8 +105,6 @@ public class BettaTensorFlowRedSkyBridge extends LinearOpMode {
                             robot.runDrive("d", robot.TRANSLATE_SPEED, 20,
                                     20, 0);
 
-                            // distance from bridge is farther
-                            robot.dfb += 4;
                         }
                         // if robot is left of skystone
                         else if (middlex > 370) {
@@ -120,8 +118,6 @@ public class BettaTensorFlowRedSkyBridge extends LinearOpMode {
                             robot.runDrive("d", robot.TRANSLATE_SPEED, 20,
                                     20, 0);
 
-                            // distance from bridge is shorter
-                            robot.dfb -= 4;
                         } else {
                             telemetry.addLine("robot in center");
 
@@ -139,30 +135,7 @@ public class BettaTensorFlowRedSkyBridge extends LinearOpMode {
     }
 
     public void runAutonomousSector() {
-        if (i == 0) {
-            robot.runIntake("in");
-            robot.runDrive("d", robot.TRANSLATE_SPEED, 6, 6, 0);
-            robot.runIntake("stop");
-            robot.runDrive("d", robot.TRANSLATE_SPEED, -11, -11, 0);
-            robot.runDrive("d", robot.TRANSLATE_SPEED, 15, -15, 90);
-            robot.runDrive("d", robot.TRANSLATE_SPEED, robot.dfb + 11,
-                    robot.dfb + 11, 0);
-            robot.runIntake("out");
-            robot.runDrive("d", robot.TRANSLATE_SPEED, -59, -59, 0);
-            robot.runDrive("d", robot.TRANSLATE_SPEED, -15, 15, -90);
-            robot.dfb = 48;
-        }
-        else if (i == 1) {
-            robot.runIntake("in");
-            robot.runDrive("d", robot.TRANSLATE_SPEED, 6, 6, 0);
-            robot.runIntake("stop");
-            robot.runDrive("d", robot.TRANSLATE_SPEED, -11, -11, 0);
-            robot.runDrive("d", robot.TRANSLATE_SPEED, 15, -15, 90);
-            robot.runDrive("d", robot.TRANSLATE_SPEED, robot.dfb + 11,
-                    robot.dfb + 11, 0);
-            robot.runIntake("out");
-            robot.runDrive("d", robot.TRANSLATE_SPEED, -11, -11, 0);
-        }
+
     }
 
     /**

@@ -30,9 +30,8 @@ import java.util.List;
  * monitor: 640 x 480
  */
 
-
-@Autonomous(name= "BettaCVRedSkyBridge", group = "DriveTrain")
-public class BettaCVRedSkyBridge extends LinearOpMode {
+@Autonomous(name= "BettaCVBlueSkyBridge", group = "DriveTrain")
+public class BettaCVBlueSkyBridge extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
 
     BettaAutoTemplate robot = new BettaAutoTemplate();
@@ -77,7 +76,7 @@ public class BettaCVRedSkyBridge extends LinearOpMode {
             telemetry.addData("Values", valLeft+"   "+valMid+"   "+valRight);
             telemetry.update();
 
-            for (i=0; i < 2; ++ i) {
+            for (i=0; i < 2; ++i) {
                 runVisionSector();
             }
 
@@ -108,12 +107,8 @@ public class BettaCVRedSkyBridge extends LinearOpMode {
 
                 robot.runDrive("s", robot.TRANSLATE_SPEED, 22,
                         22, 0);
-
-                robot.runDrive("d", robot.TRANSLATE_SPEED, -42,
-                        42, 180);
-
-                robot.runDrive("d", robot.TRANSLATE_SPEED, 47,
-                        47, 0);
+                robot.runDrive("d", robot.TRANSLATE_SPEED, 31,
+                        31, 0);
 
                 robot.runIntake("out");
                 sleep(2000);
@@ -122,11 +117,16 @@ public class BettaCVRedSkyBridge extends LinearOpMode {
             else if (valMid == 0) {
                 robot.runDrive("s", robot.TRANSLATE_SPEED, -3,
                         -3, 0);
-                robot.runDrive("d", robot.TRANSLATE_SPEED, -17,
-                        -17, 0);
+                robot.runDrive("d", robot.TRANSLATE_SPEED, 17,
+                        17, 0);
 
-                robot.runDrive("s", robot.TRANSLATE_SPEED, -39,
-                        -39, 0);
+                robot.runDrive("s", robot.TRANSLATE_SPEED, -17,
+                        -17, 0);
+                robot.runDrive("d", robot.TRANSLATE_SPEED, 42,
+                        -42, 180);
+
+                robot.runDrive("s", robot.TRANSLATE_SPEED, 22,
+                        22, 0);
 
                 robot.runIntake("in");
                 robot.runDrive("d", robot.TRANSLATE_SPEED, 9,
@@ -138,7 +138,6 @@ public class BettaCVRedSkyBridge extends LinearOpMode {
 
                 robot.runDrive("d", robot.TRANSLATE_SPEED,
                         -42, 42, 180);
-
                 robot.runDrive("d", robot.TRANSLATE_SPEED, 41,
                         41, 0);
 
@@ -168,8 +167,10 @@ public class BettaCVRedSkyBridge extends LinearOpMode {
                 robot.runDrive("s", robot.TRANSLATE_SPEED, -20,
                         -20, 0);
 
-                robot.runDrive("d", robot.TRANSLATE_SPEED, 31,
-                        31, 0);
+                robot.runDrive("d", robot.TRANSLATE_SPEED,
+                        42, -42, 180);
+                robot.runDrive("d", robot.TRANSLATE_SPEED, 47,
+                        47, 0);
 
                 robot.runIntake("out");
                 sleep(2000);
@@ -206,14 +207,8 @@ public class BettaCVRedSkyBridge extends LinearOpMode {
 //                robot.runDrive("s", robot.TRANSLATE_SPEED, 22,
 //                        22, 0);
 //
-//                robot.runDrive("d", robot.TRANSLATE_SPEED, -3,
-//                        -3, 0);
-//
-//                robot.runDrive("d", robot.TRANSLATE_SPEED,
-//                        -42, 42, 180);
-//
-//                robot.runDrive("d", robot.TRANSLATE_SPEED, 87,
-//                        87, 0);
+//                robot.runDrive("d", robot.TRANSLATE_SPEED, 71,
+//                        71, 0);
 //
 //                robot.runIntake("out");
 //                sleep(2000);
@@ -280,8 +275,8 @@ public class BettaCVRedSkyBridge extends LinearOpMode {
 //                robot.runDrive("d", robot.TRANSLATE_SPEED,
 //                        42, -42, 180);
 //
-//                robot.runDrive("d", robot.TRANSLATE_SPEED, 71,
-//                        71, 0);
+//                robot.runDrive("d", robot.TRANSLATE_SPEED, 87,
+//                        87, 0);
 //
 //                robot.runIntake("out");
 //                sleep(2000);

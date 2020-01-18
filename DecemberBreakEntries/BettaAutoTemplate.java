@@ -14,11 +14,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-/**
- * set up lift
- * transfer
- */
-
 
 /**
  * Default template for 7641 BettaFish autonomous robot
@@ -38,15 +33,14 @@ public class BettaAutoTemplate {
     public Servo fMoverR;
     public DcMotor intakeL;
     public DcMotor intakeR;
-    public DcMotor liftL;
-    public DcMotor liftR;
+    public DcMotor lift;
     private BNO055IMU imu;
 
     /*
     Encoder parameters
     COUNTS_PER_INCH: Calculates how many encoder ticks per inch
      */
-    public final double TRANSLATE_SPEED = .1;
+    public final double TRANSLATE_SPEED = .5;
     static final double COUNTS_PER_MOTOR_REV = 560;
     static final double WHEEL_DIAMETER_INCHES = 77.0 / 25.4;
     static final double COUNTS_PER_INCH = COUNTS_PER_MOTOR_REV / (WHEEL_DIAMETER_INCHES * Math.PI);
@@ -63,7 +57,6 @@ public class BettaAutoTemplate {
     Class parameters
      */
     private int leftFrontTarget, leftBackTarget, rightFrontTarget, rightBackTarget;
-    public int dfb = 30; // distance from bridge
     private HardwareMap hwMap;
 
     /** Constructors */
@@ -161,12 +154,6 @@ public class BettaAutoTemplate {
             rightFrontTarget = fr.getCurrentPosition() + rightRev;
             rightBackTarget = br.getCurrentPosition() + rightRev;
         }
-        else if (movementType.equals("ds")) {
-            leftFrontTarget = fl.getCurrentPosition() + rightRev;
-            leftBackTarget = bl.getCurrentPosition() + leftRev;
-            rightFrontTarget = fr.getCurrentPosition() + leftRev;
-            rightBackTarget = br.getCurrentPosition() + rightRev;
-        }
 
         // set target position and set mode run to position
         fl.setTargetPosition(leftFrontTarget);
@@ -201,11 +188,11 @@ public class BettaAutoTemplate {
      * @param movementType open or close
      */
     public void runIntake(String movementType) {
-        if (movementType.equals("in")) {
+        if (movementType.equals("out")) {
             intakeL.setPower(1);
             intakeR.setPower(1);
         }
-        else if (movementType.equals("out")) {
+        else if (movementType.equals("in")) {
             intakeL.setPower(-1);
             intakeR.setPower(-1);
         }
