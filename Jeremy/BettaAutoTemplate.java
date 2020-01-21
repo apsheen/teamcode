@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-//import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.hardware.bosch.BNO055IMU;
+
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -28,11 +29,12 @@ public class BettaAutoTemplate {
     private DcMotor fr;
     private DcMotor bl;
     private DcMotor br;
-//    public DcMotor liftL;
-//    public DcMotor liftR;
-    private DcMotor manip;
+    public Servo fMoverL;
+    public Servo fMoverR;
+    public DcMotor intakeL;
+    public DcMotor intakeR;
+    public DcMotor lift;
     private BNO055IMU imu;
-    //    public Servo fMover;
 
     /*
     Encoder parameters
@@ -42,6 +44,7 @@ public class BettaAutoTemplate {
     static final double COUNTS_PER_MOTOR_REV = 560;
     static final double WHEEL_DIAMETER_INCHES = 77.0 / 25.4;
     static final double COUNTS_PER_INCH = COUNTS_PER_MOTOR_REV / (WHEEL_DIAMETER_INCHES * Math.PI);
+    private int leftRev, rightRev;
 
     /*
     IMU parameters
@@ -53,8 +56,7 @@ public class BettaAutoTemplate {
     /*
     Class parameters
      */
-    private int leftFrontTarget, leftBackTarget, rightFrontTarget, rightBackTarget, manipTarget;
-    public int distanceFromBridge;
+    private int leftFrontTarget, leftBackTarget, rightFrontTarget, rightBackTarget;
     private HardwareMap hwMap;
 
     /** Constructors */
@@ -77,10 +79,10 @@ public class BettaAutoTemplate {
         br = hwMap.get(DcMotor.class, "rightBack");
 
         // set drive train motors' directions
-        fl.setDirection(DcMotor.Direction.FORWARD);
-        bl.setDirection(DcMotor.Direction.FORWARD);
-        fr.setDirection(DcMotor.Direction.REVERSE);
-        br.setDirection(DcMotor.Direction.REVERSE);
+        fl.setDirection(DcMotor.Direction.REVERSE);
+        bl.setDirection(DcMotor.Direction.REVERSE);
+        fr.setDirection(DcMotor.Direction.FORWARD);
+        br.setDirection(DcMotor.Direction.FORWARD);
 
         // reset encoder ticks of drive train
         fl.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -94,11 +96,32 @@ public class BettaAutoTemplate {
         fr.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         br.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        // set up manipulator config
-        manip = hwMap.get(DcMotor.class, "manipM");
-        manip.setDirection(DcMotor.Direction.FORWARD);
-        manip.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        manip.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        // initialize drive train motors
+        intakeL = hwMap.get(DcMotor.class, "intakeL");
+        intakeR = hwMap.get(DcMotor.class, "intakeR");
+
+        // set intake motors' directions
+        intakeL.setDirection(DcMotor.Direction.REVERSE);
+        intakeR.setDirection(DcMotor.Direction.FORWARD);
+
+        // reset encoder ticks of drive train
+        intakeL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        intakeR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        // drive train motors' mode: run using encoder
+        intakeL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        intakeR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+        // initialize foundation mover servos
+        fMoverL = hwMap.get(Servo.class, "fMoverL");
+        fMoverR = hwMap.get(Servo.class, "fMoverR");
+
+        // set foundation mover servos' directions
+        fMoverL.setDirection(Servo.Direction.FORWARD);
+        fMoverR.setDirection(Servo.Direction.REVERSE);
+
 
         // set up gyro parameters and calibrate
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -113,21 +136,26 @@ public class BettaAutoTemplate {
     /**
      May get rid of getCurrentPosition() if not necessary
      */
-    public void encoderRun(String movementType, double vel, double leftShift, double rightShift,
+    public void runDrive(String movementType, double vel, double leftShift, double rightShift,
                            double angle) {
-        if (movementType.equals("strafe")) {
-            leftFrontTarget = fl.getCurrentPosition() - (int) (leftShift * COUNTS_PER_INCH);
-            leftBackTarget = bl.getCurrentPosition() + (int) (leftShift * COUNTS_PER_INCH);
-            rightFrontTarget = fr.getCurrentPosition() + (int) (rightShift * COUNTS_PER_INCH);
-            rightBackTarget = br.getCurrentPosition() - (int) (rightShift * COUNTS_PER_INCH);
+        leftRev = (int) (leftShift * COUNTS_PER_INCH);
+        rightRev = (int) (rightShift * COUNTS_PER_INCH);
+        // strafe
+        if (movementType.equals("s")) {
+            leftFrontTarget = fl.getCurrentPosition() - leftRev;
+            leftBackTarget = bl.getCurrentPosition() + leftRev;
+            rightFrontTarget = fr.getCurrentPosition() + rightRev;
+            rightBackTarget = br.getCurrentPosition() - rightRev;
         }
-        else if (movementType.equals("drive")) {
-            leftFrontTarget = fl.getCurrentPosition() + (int) (leftShift * COUNTS_PER_INCH);
-            leftBackTarget = bl.getCurrentPosition() + (int) (leftShift * COUNTS_PER_INCH);
-            rightFrontTarget = fr.getCurrentPosition() + (int) (rightShift * COUNTS_PER_INCH);
-            rightBackTarget = br.getCurrentPosition() + (int) (rightShift * COUNTS_PER_INCH);
+        // drive
+        else if (movementType.equals("d")) {
+            leftFrontTarget = fl.getCurrentPosition() + leftRev;
+            leftBackTarget = bl.getCurrentPosition() + leftRev;
+            rightFrontTarget = fr.getCurrentPosition() + rightRev;
+            rightBackTarget = br.getCurrentPosition() + rightRev;
         }
 
+        // set target position and set mode run to position
         fl.setTargetPosition(leftFrontTarget);
         bl.setTargetPosition(leftBackTarget);
         fr.setTargetPosition(rightFrontTarget);
@@ -140,6 +168,7 @@ public class BettaAutoTemplate {
 
         runtime.reset();
 
+        // run motors until reached target position
         while (fl.isBusy() && bl.isBusy() && fr.isBusy()
                 && br.isBusy()) {
             correction = checkDirection(angle);
@@ -155,35 +184,36 @@ public class BettaAutoTemplate {
     }
 
     /**
-     * Runs manipulator with encoders
+     * Runs intake with encoders
      * @param movementType open or close
      */
-    public void manipRun(String movementType) {
-        double manipV = 0;
-
-        if (movementType.equals("open")) {
-            manipTarget = manip.getCurrentPosition() + 10;
-            manipV = 0.1;
+    public void runIntake(String movementType) {
+        if (movementType.equals("out")) {
+            intakeL.setPower(1);
+            intakeR.setPower(1);
         }
-        else if (movementType.equals("close")) {
-            manipTarget = manip.getCurrentPosition() - 10;
-            manipV = -0.1;
+        else if (movementType.equals("in")) {
+            intakeL.setPower(-1);
+            intakeR.setPower(-1);
         }
-
-        manip.setTargetPosition(manipTarget);
-
-        manip.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        runtime.reset();
-        manip.setPower(manipV);
-
-        while (runtime.seconds() < 1 && manip.isBusy()) {
-
+        else if (movementType.equals("stop")) {
+            intakeL.setPower(0);
+            intakeR.setPower(0);
         }
+    }
 
-        manip.setPower(0);
-
-        manip.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    /**
+     * Runs foundation mover
+     */
+    public void runFoundationMover(String movementType) {
+        if (movementType.equals("down")) {
+            fMoverL.setPosition(1);
+            fMoverR.setPosition(1);
+        }
+        else if (movementType.equals("up")) {
+            fMoverL.setPosition(0);
+            fMoverR.setPosition(0);
+        }
     }
 
     /**
