@@ -45,7 +45,7 @@ public class BettaTeleOp extends LinearOpMode {
     int transferTargPos;
 
     boolean ninjaMode;
-    private final double ninjaSpeedScale = .175;
+    private final double ninjaSpeedScale = .2;
 
     NinjaOperator gamepad1X = new NinjaOperator();
     NinjaOperator gamepad2X = new NinjaOperator();
@@ -90,10 +90,10 @@ public class BettaTeleOp extends LinearOpMode {
      */
     public void init_motors() {
         // drive train
-        fl = hardwareMap.get(DcMotor.class, "leftFront");
-        bl = hardwareMap.get(DcMotor.class, "leftBack");
-        fr = hardwareMap.get(DcMotor.class, "rightFront");
-        br = hardwareMap.get(DcMotor.class, "rightBack");
+        fl = hardwareMap.get(DcMotor.class, "fl");
+        bl = hardwareMap.get(DcMotor.class, "bl");
+        fr = hardwareMap.get(DcMotor.class, "fr");
+        br = hardwareMap.get(DcMotor.class, "br");
 
         fl.setDirection(DcMotor.Direction.REVERSE);
         bl.setDirection(DcMotor.Direction.REVERSE);
@@ -195,12 +195,12 @@ public class BettaTeleOp extends LinearOpMode {
     // gamepad1 bumpers
     public void runManipulator() {
         if (this.gamepad1.left_bumper) {
-            manip.setPosition(.85);
-            telemetry.addData("manip pos", .85);
+            manip.setPosition(.95);
+            telemetry.addData("manip pos", .95);
         }
         else if (this.gamepad1.right_bumper) {
-            manip.setPosition(.25);
-            telemetry.addData("manip pos", 25);
+            manip.setPosition(.1);
+            telemetry.addData("manip pos", .15);
         }
     }
 
@@ -266,7 +266,7 @@ public class BettaTeleOp extends LinearOpMode {
             fPos = .7;
         }
         fMoverL.setPosition(fPos);
-        fMoverR.setPosition(fPos);
+        fMoverR.setPosition(fPos + .1);
     }
 
     /*
